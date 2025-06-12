@@ -1,0 +1,29 @@
+{
+  "name": "trainee",
+  "version": "1.0.0",
+  "description": "Anton Tratseuski's trainee project",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "headed": "npx playwright test --headed",
+    "report": "npx playwright show-report",
+    "ui": "npx playwright test --ui"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rockuro709/trainee.git"
+  },
+  "keywords": [],
+  "author": "Anton Tratseuski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rockuro709/trainee/issues"
+  },
+  "homepage": "https://github.com/rockuro709/trainee#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.53.0",
+    "@types/node": "^24.0.1",
+    "typescript": "^5.8.3"
+  }
+}
