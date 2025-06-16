@@ -11,11 +11,3 @@ export class CookieBanner extends BasePage {
     );
   }
 }
-
-// await page.goto("https://www.discogs.com/");
-// const acceptCookiesButton = page.locator(
-//   "button#onetrust-accept-btn-handler"
-// );
-// await expect(acceptCookiesButton).toBeVisible();
-// await acceptCookiesButton.click();
-// await expect(acceptCookiesButton).toBeHidden({ timeout: 10000 });
