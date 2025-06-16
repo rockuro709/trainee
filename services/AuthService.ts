@@ -1,9 +1,10 @@
+//AuthService.ts
 import { Page } from "@playwright/test";
 import { LoginPage } from "../pages/LoginPage";
 import { HomePage } from "../pages/HomePage";
-import { IUserData } from "../types/IUserData";
+import { LoginCredentials } from "../types/LoginCredentials";
 
-export class LoginService {
+export class AuthService {
   private readonly page: Page;
   private readonly homePage: HomePage;
   private readonly loginPage: LoginPage;
@@ -14,7 +15,7 @@ export class LoginService {
     this.loginPage = new LoginPage(page);
   }
 
-  public async login(user: IUserData): Promise<void> {
+  public async login(user: LoginCredentials): Promise<void> {
     await this.homePage.loginButton.click();
     await this.loginPage.usernameOrEmailField.fill(user.username!);
     await this.loginPage.passwordField.fill(user.password);

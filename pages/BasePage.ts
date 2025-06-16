@@ -1,3 +1,4 @@
+//BasePage.ts
 import { Page } from "@playwright/test";
 
 export default class BasePage {
