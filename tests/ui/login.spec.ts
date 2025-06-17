@@ -1,25 +1,17 @@
-//login.spec.ts
-import { test, expect } from "@playwright/test";
-import { CookieBanner } from "../../pages/components/CookieBanner";
-import { LoginCredentials } from "../../types/LoginCredentials";
-import { AuthService } from "../../services/AuthService";
+// tests/ui/login.spec.ts
+import { test } from "../../fixtures/fixtures";
+import { expect } from "@playwright/test";
 
-//нельзя использовать beforeAll
-test.beforeEach(async ({ page }) => {
-  const cookieBanner = new CookieBanner(page);
-  await cookieBanner.navigate("/");
-  await cookieBanner.cookiesAcceptButton.click();
-});
-
-test.describe("Login", async () => {
-  test("should see username field", async ({ page }) => {
-    const authService = new AuthService(page);
-    //fixture для юзера
-    const user: LoginCredentials = {
-      username: process.env.DISCOGS_USERNAME!,
-      password: process.env.DISCOGS_PASSWORD!,
-    };
-    await authService.login(user);
-    await expect(page).toHaveTitle("Discogs - Music Database and Marketplace");
+test.describe("Auth", async () => {
+  test("should login successfully", async ({ web, page, testUser }) => {
+    await web.authService.login(testUser);
+    await expect(web.header.loggedInAsAriaLabel).toHaveAttribute(
+      "aria-label",
+      `Logged in as ${testUser.username.toLowerCase()}`
+    );
+  });
+  test("should logout successfully", async ({ web, loggedInPage }) => {
+    await web.authService.logout();
+    await expect(web.header.loginButton).toBeVisible();
   });
 });

@@ -1,7 +1,7 @@
-//BasePage.ts
+// pages/BasePage.ts
 import { Page } from "@playwright/test";
 
-export default class BasePage {
+export class BasePage {
   readonly page: Page;
 
   constructor(page: Page) {
