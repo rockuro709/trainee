@@ -1,5 +1,9 @@
 // clients/WantlistClient.ts
 import { APIRequestContext } from "@playwright/test";
+import {
+  AddItemToWantlistResponseDto,
+  GetWantlistResponseDto,
+} from "../types/api/wantlist.dto";
 
 /**
  * @description Клиент для взаимодействия с Discogs Wantlist API.
@@ -26,7 +30,9 @@ export class WantlistClient {
    * @throws Error в случае неудачного ответа API.
    * @see https://www.discogs.com/developers/#page:user-wantlist,header:user-wantlist-add-to-wantlist-put
    */
-  async addReleaseToWantlist(releaseId: number): Promise<any> {
+  async addReleaseToWantlist(
+    releaseId: number
+  ): Promise<AddItemToWantlistResponseDto> {
     // В документации указан PUT запрос: PUT /users/{username}/wants/{release_id}
     const endpoint = `${this.baseUrl}/users/${this.username}/wants/${releaseId}`;
     console.log(`API: Adding release ${releaseId} to wantlist at ${endpoint}`);
@@ -76,7 +82,7 @@ export class WantlistClient {
    * @throws Error в случае неудачного ответа API.
    * @see https://www.discogs.com/developers/#page:user-wantlist,header:user-wantlist-wantlist-get
    */
-  async getWantlist(): Promise<any> {
+  async getWantlist(): Promise<GetWantlistResponseDto> {
     // В документации указан GET запрос: GET /users/{username}/wants
     const endpoint = `${this.baseUrl}/users/${this.username}/wants`;
     console.log(
