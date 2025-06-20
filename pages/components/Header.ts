@@ -1,26 +1,19 @@
 // pages/components/HomePage.ts
-import { Page, Locator } from "@playwright/test";
 import { BasePage } from "../BasePage";
 
 export class Header extends BasePage {
-  readonly loginButton: Locator;
-  readonly loggedInAsAriaLabel: Locator;
-  readonly logoutButton: Locator;
+  readonly shadowHost = this.page
+    .locator("#main_wrapper")
+    .locator("div")
+    .first();
 
-  constructor(page: Page) {
-    super(page);
-    this.loginButton = page.locator("#log_in_link");
-    this.loggedInAsAriaLabel = page
-      .locator("#main_wrapper")
-      .locator("div")
-      .first()
-      .getByRole("button", {
-        name: /Logged in as/i,
-      });
-    this.logoutButton = page //надо делать композит
-      .locator("#main_wrapper")
-      .locator("div")
-      .first()
-      .locator("[href='/logout']");
-  }
+  readonly buttons = {
+    loginButton: this.page.locator("#log_in_link"),
+    logoutButton: this.shadowHost.locator("[href='/logout']"),
+    wantlistButton: this.shadowHost.locator("[href='/mywantlist']"),
+  };
+
+  readonly loggedInAsAriaLabel = this.shadowHost.getByRole("button", {
+    name: /Logged in as/i,
+  });
 }

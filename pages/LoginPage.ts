@@ -1,15 +1,13 @@
 // pages/LoginPage.ts
-import { Page, Locator } from "@playwright/test";
 import { BasePage } from "./BasePage";
 
 export class LoginPage extends BasePage {
-  readonly usernameOrEmailField: Locator;
-  readonly passwordField: Locator;
-  readonly continueButton: Locator;
-  constructor(page: Page) {
-    super(page);
-    this.usernameOrEmailField = page.locator("#username");
-    this.passwordField = page.locator("#password");
-    this.continueButton = page.locator(".c86834282"); //пока стабилен
-  }
+  readonly buttons = {
+    continueButton: this.page.locator("[type='submit'][name='action']"),
+  };
+
+  readonly fields = {
+    usernameOrEmailField: this.page.locator("#username"),
+    passwordField: this.page.locator("#password"),
+  };
 }

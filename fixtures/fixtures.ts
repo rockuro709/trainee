@@ -1,13 +1,13 @@
-// fixtures/fixtures.ts
 import { test as baseTest } from "@playwright/test";
 import { Web } from "../utils/Web";
 import { LoginCredentials } from "../types/LoginCredentials";
-import { Page } from "@playwright/test";
+import { WantlistClient } from "../clients/WantlistClient";
 
 type MyFixtures = {
   web: Web;
   testUser: LoginCredentials;
-  loggedInPage: Page; //
+  webLoggedIn: Web;
+  wantlistClient: WantlistClient;
 };
 
 export const test = baseTest.extend<MyFixtures>({
@@ -17,31 +17,43 @@ export const test = baseTest.extend<MyFixtures>({
       email: process.env.DISCOGS_EMAIL!,
       password: process.env.DISCOGS_PASSWORD!,
     };
-    if (!user.username && !user.email) {
-      throw new Error("DISCOGS_USERNAME or DISCOGS_EMAIL must be set.");
-    }
-    if (!user.password) {
-      throw new Error("DISCOGS_PASSWORD must be set.");
+    if (!user.username || !user.password) {
+      throw new Error(
+        "DISCOGS_USERNAME and DISCOGS_PASSWORD must be set in .env file."
+      );
     }
     await use(user);
   },
 
-  loggedInPage: async ({ page: basePage, testUser }, use) => {
-    const web = new Web(basePage);
-    await web.authService.login(testUser);
-
-    await use(basePage);
-  },
-
-  page: async ({ page }, use) => {
-    const web = new Web(page);
-    await page.goto("/");
-    await web.cookieBanner.acceptCookies();
-    await use(page);
-  },
-
   web: async ({ page }, use) => {
     const web = new Web(page);
+    await web.cookieBanner.navigate();
+    await web.cookieBanner.acceptCookies();
     await use(web);
+  },
+
+  webLoggedIn: async ({ web, testUser }, use) => {
+    await web.authService.login(testUser);
+    await use(web);
+  },
+
+  wantlistClient: async ({ testUser, playwright }, use) => {
+    const apiToken = process.env.DISCOGS_API_TOKEN;
+    if (!apiToken) {
+      throw new Error("DISCOGS_API_TOKEN must be set in .env file.");
+    }
+
+    //создаём апи-контекст с дополнительным хедером
+    const requestContext = await playwright.request.newContext({
+      baseURL: "https://api.discogs.com",
+      extraHTTPHeaders: {
+        Authorization: apiToken, //передача токена авторизации
+        "User-Agent": "MyTraineeTestFramework/1.0",
+      },
+    });
+    //создаём клиент с нужным контекстом
+    const client = new WantlistClient(requestContext, testUser.username);
+    await use(client);
+    await requestContext.dispose();
   },
 });
