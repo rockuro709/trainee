@@ -21,6 +21,7 @@ jobs:
           DISCOGS_USERNAME: ${{ secrets.DISCOGS_USERNAME }}
           DISCOGS_PASSWORD: ${{ secrets.DISCOGS_PASSWORD }}
           DISCOGS_EMAIL: ${{ secrets.DISCOGS_EMAIL }}
+          DISCOGS_API_TOKEN: ${{ secrets.DISCOGS_API_TOKEN }}
         run: npx playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
