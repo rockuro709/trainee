@@ -1,12 +1,25 @@
-# .github/workflows/playwright.yml
 name: Trainee's project
 on:
   push:
     branches: main
+  workflow_dispatch: #ручной запуск
+
+#права на чтение репозитория и на публикацию отчета
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+
+    #связь с окружением GitHub Pages, чтобы GitHub мог сгенерировать ссылку на отчет
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -16,16 +29,26 @@ jobs:
         run: npm ci
       - name: Install Playwright Chromium
         run: npx playwright install chromium --with-deps
+
       - name: Run Playwright tests
+        #следующие шаги выполняются, даже если тесты упадут
+        if: always()
         env:
           DISCOGS_USERNAME: ${{ secrets.DISCOGS_USERNAME }}
           DISCOGS_PASSWORD: ${{ secrets.DISCOGS_PASSWORD }}
           DISCOGS_EMAIL: ${{ secrets.DISCOGS_EMAIL }}
           DISCOGS_API_TOKEN: ${{ secrets.DISCOGS_API_TOKEN }}
         run: npx playwright test
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+
+      # специальный экшн упаковывает отчет в формат, понятный для публикации
+      - name: Upload artifact for GitHub Pages
+        if: always()
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: playwright-report
           path: playwright-report/
-          retention-days: 30
+
+      #экшн берет артефакт и публикует его
+      - name: Deploy to GitHub Pages
+        if: always()
+        id: deployment #используется в environment.url выше
+        uses: actions/deploy-pages@v4

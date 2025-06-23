@@ -39,6 +39,3 @@ test.describe("Wantlist scenarios with UI and API", async () => {
     });
   });
 });
-
-// api/client clientManager
-//фикстура через гет получает лейбл с массивом релизов

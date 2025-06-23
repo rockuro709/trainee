@@ -17,11 +17,6 @@ export const test = baseTest.extend<MyFixtures>({
       email: process.env.DISCOGS_EMAIL!,
       password: process.env.DISCOGS_PASSWORD!,
     };
-    if (!user.username || !user.password) {
-      throw new Error(
-        "DISCOGS_USERNAME and DISCOGS_PASSWORD must be set in .env file."
-      );
-    }
     await use(user);
   },
 
@@ -38,11 +33,7 @@ export const test = baseTest.extend<MyFixtures>({
   },
 
   wantlistClient: async ({ testUser, playwright }, use) => {
-    const apiToken = process.env.DISCOGS_API_TOKEN;
-    if (!apiToken) {
-      throw new Error("DISCOGS_API_TOKEN must be set in .env file.");
-    }
-
+    const apiToken = process.env.DISCOGS_API_TOKEN!;
     //создаём апи-контекст с дополнительным хедером
     const requestContext = await playwright.request.newContext({
       baseURL: "https://api.discogs.com",

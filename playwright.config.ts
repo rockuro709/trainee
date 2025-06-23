@@ -8,6 +8,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
+const requiredEnvVars = [
+  "DISCOGS_USERNAME",
+  "DISCOGS_EMAIL",
+  "DISCOGS_PASSWORD",
+  "DISCOGS_API_TOKEN",
+];
+for (const varName of requiredEnvVars) {
+  if (!process.env[varName]) {
+    throw new Error(
+      `Environment variable ${varName} is not set. Please check your .env file or CI/CD configuration.`
+    );
+  }
+}
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
