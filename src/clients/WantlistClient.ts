@@ -31,7 +31,7 @@ export class WantlistClient {
    * @see https://www.discogs.com/developers/#page:user-wantlist,header:user-wantlist-add-to-wantlist-put
    */
   async addReleaseToWantlist(
-    releaseId: number
+    releaseId: number,
   ): Promise<AddItemToWantlistResponseDto> {
     // В документации указан PUT запрос: PUT /users/{username}/wants/{release_id}
     const endpoint = `${this.baseUrl}/users/${this.username}/wants/${releaseId}`;
@@ -41,11 +41,11 @@ export class WantlistClient {
     if (!response.ok()) {
       const errorText = await response.text();
       throw new Error(
-        `Failed to add release ${releaseId} to wantlist. Status: ${response.status()} ${response.statusText()}. Body: ${errorText}`
+        `Failed to add release ${releaseId} to wantlist. Status: ${response.status()} ${response.statusText()}. Body: ${errorText}`,
       );
     }
     console.log(
-      `API: Successfully added release ${releaseId}. Status: ${response.status()}`
+      `API: Successfully added release ${releaseId}. Status: ${response.status()}`,
     );
     return await response.json(); // Discogs возвращает JSON после добавления
   }
@@ -61,18 +61,18 @@ export class WantlistClient {
     // В документации указан DELETE запрос: DELETE /users/{username}/wants/{release_id}
     const endpoint = `${this.baseUrl}/users/${this.username}/wants/${releaseId}`;
     console.log(
-      `API: Removing release ${releaseId} from wantlist at ${endpoint}`
+      `API: Removing release ${releaseId} from wantlist at ${endpoint}`,
     );
     const response = await this.request.delete(endpoint);
 
     if (!response.ok()) {
       const errorText = await response.text();
       throw new Error(
-        `Failed to remove release ${releaseId} from wantlist. Status: ${response.status()} ${response.statusText()}. Body: ${errorText}`
+        `Failed to remove release ${releaseId} from wantlist. Status: ${response.status()} ${response.statusText()}. Body: ${errorText}`,
       );
     }
     console.log(
-      `API: Successfully removed release ${releaseId}. Status: ${response.status()}`
+      `API: Successfully removed release ${releaseId}. Status: ${response.status()}`,
     );
   }
 
@@ -86,7 +86,7 @@ export class WantlistClient {
     // В документации указан GET запрос: GET /users/{username}/wants
     const endpoint = `${this.baseUrl}/users/${this.username}/wants`;
     console.log(
-      `API: Getting wantlist for user ${this.username} from ${endpoint}`
+      `API: Getting wantlist for user ${this.username} from ${endpoint}`,
     );
     const response = await this.request.get(endpoint);
 
@@ -95,7 +95,7 @@ export class WantlistClient {
       throw new Error(
         `Failed to get wantlist for user ${
           this.username
-        }. Status: ${response.status()} ${response.statusText()}. Body: ${errorText}`
+        }. Status: ${response.status()} ${response.statusText()}. Body: ${errorText}`,
       );
     }
     console.log(`API: Successfully got wantlist. Status: ${response.status()}`);

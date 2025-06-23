@@ -1,5 +1,5 @@
 // tests/ui/wantlist.spec.ts
-import { test } from "../../fixtures/fixtures";
+import { test } from "../../src/fixtures/fixtures";
 import { expect } from "@playwright/test";
 
 const RELEASE_ID = 6698369;
@@ -15,7 +15,7 @@ test.describe("Wantlist scenarios with UI and API", async () => {
       const wantlist = await wantlistClient.getWantlist();
       expect(wantlist.wants).toBeDefined();
       const addedRelease = wantlist.wants.find(
-        (item) => item.id === RELEASE_ID
+        (item) => item.id === RELEASE_ID,
       );
       expect(addedRelease).toBeDefined();
       expect(addedRelease?.basic_information.title).toEqual(RELEASE_TITLE);

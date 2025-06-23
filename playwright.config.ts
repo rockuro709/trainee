@@ -17,7 +17,7 @@ const requiredEnvVars = [
 for (const varName of requiredEnvVars) {
   if (!process.env[varName]) {
     throw new Error(
-      `Environment variable ${varName} is not set. Please check your .env file or CI/CD configuration.`
+      `Environment variable ${varName} is not set. Please check your .env file or CI/CD configuration.`,
     );
   }
 }

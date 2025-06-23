@@ -14,10 +14,16 @@ export class WantlistService {
   public async addReleaseToWantlist(ID: number): Promise<void> {
     await this.web.basePage.navigate(`release/${ID}`);
     await this.web.releasePage.buttons.addToWantlistButton.click();
+    await this.web.releasePage.buttons.removeFromWantlistButton.waitFor({
+      state: "visible",
+    });
   }
 
   public async removeReleaseFromWantlist(ID: number): Promise<void> {
     await this.web.basePage.navigate(`release/${ID}`);
     await this.web.releasePage.buttons.removeFromWantlistButton.click();
+    await this.web.releasePage.buttons.addToWantlistButton.waitFor({
+      state: "visible",
+    });
   }
 }
