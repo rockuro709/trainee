@@ -1,4 +1,4 @@
-// pages/components/CookieBanner.ts
+//src/pages/components/CookieBanner.ts
 import { BasePage } from "../BasePage";
 
 export class CookieBanner extends BasePage {

@@ -1,13 +1,15 @@
-import { test as baseTest } from "@playwright/test";
+// src/fixtures/fixtures.ts
+import { test as baseTest, APIRequestContext } from "@playwright/test";
 import { Web } from "../utils/Web";
 import { LoginCredentials } from "../types/LoginCredentials";
-import { WantlistClient } from "../clients/WantlistClient";
+import { baseApiURL } from "../../playwright.config";
+import { ClientManager } from "../clients/ClientManager";
 
 type MyFixtures = {
-  web: Web;
   testUser: LoginCredentials;
-  webLoggedIn: Web;
-  wantlistClient: WantlistClient;
+  web: Web;
+  authorizedContext: APIRequestContext;
+  api: ClientManager;
 };
 
 export const test = baseTest.extend<MyFixtures>({
@@ -27,24 +29,24 @@ export const test = baseTest.extend<MyFixtures>({
     await use(web);
   },
 
-  webLoggedIn: async ({ web, testUser }, use) => {
-    await web.authService.login(testUser);
-    await use(web);
-  },
-
-  wantlistClient: async ({ testUser, playwright }, use) => {
+  authorizedContext: async ({ playwright }, use) => {
     const apiToken = process.env.DISCOGS_API_TOKEN!;
-    //создаём апи-контекст с дополнительным хедером
-    const requestContext = await playwright.request.newContext({
-      baseURL: "https://api.discogs.com",
+
+    const context = await playwright.request.newContext({
+      baseURL: baseApiURL,
       extraHTTPHeaders: {
-        Authorization: apiToken, //передача токена авторизации
         "User-Agent": "MyTraineeTestFramework/1.0",
+        Authorization: `Discogs token=${apiToken}`,
       },
     });
-    //создаём клиент с нужным контекстом
-    const client = new WantlistClient(requestContext, testUser.username);
-    await use(client);
-    await requestContext.dispose();
+    await use(context);
+    await context.dispose();
+  },
+  api: async ({ authorizedContext, testUser }, use) => {
+    const clientManager = new ClientManager(
+      authorizedContext,
+      testUser.username,
+    );
+    await use(clientManager);
   },
 });

@@ -1,4 +1,4 @@
-// pages/ReleasePage.ts
+// src/pages/ReleasePage.ts
 import { BasePage } from "./BasePage";
 
 export class ReleasePage extends BasePage {

@@ -1,4 +1,4 @@
-// pages/BasePage.ts
+// src/pages/BasePage.ts
 import { Page } from "@playwright/test";
 
 export class BasePage {

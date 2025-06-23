@@ -1,4 +1,4 @@
-// services/WantlistService.ts
+// src/services/WantlistService.ts
 import { Page } from "@playwright/test";
 import { Web } from "../utils/Web";
 

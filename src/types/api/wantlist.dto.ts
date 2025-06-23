@@ -1,4 +1,4 @@
-// types/api/wantlist.dto.ts
+// src/types/api/wantlist.dto.ts
 export interface Format {
   name: string;
   qty: string;

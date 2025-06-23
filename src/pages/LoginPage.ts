@@ -1,9 +1,9 @@
-// pages/LoginPage.ts
+// src/pages/LoginPage.ts
 import { BasePage } from "./BasePage";
 
 export class LoginPage extends BasePage {
   readonly buttons = {
-    continueButton: this.page.locator("[type='submit'][name='action']"),
+    continueButton: this.page.locator("button[name=action]"),
   };
 
   readonly fields = {

@@ -3,6 +3,9 @@ import { defineConfig, devices } from "@playwright/test";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
+import { STORAGE_STATE_PATH } from "./global-setup";
+
+export const baseApiURL = "https://api.discogs.com";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,7 +28,8 @@ for (const varName of requiredEnvVars) {
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: "./tests",
+  //testDir: "./tests",
+  globalSetup: "./global-setup.ts",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -49,10 +53,25 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "chromium",
+      name: "auth-ui",
+      testDir: "./tests/ui/authenticated/",
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: STORAGE_STATE_PATH,
+      },
+    },
+
+    {
+      name: "guest-ui",
+      testDir: "./tests/ui/guest/",
       use: {
         ...devices["Desktop Chrome"],
       },
+    },
+
+    {
+      name: "api",
+      testDir: "./tests/api/",
     },
   ],
 

@@ -1,3 +1,4 @@
+#.github/workflows/playwright.yml
 name: Trainee's project
 on:
   push:
