@@ -3,9 +3,10 @@ import { defineConfig, devices } from "@playwright/test";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
-import { STORAGE_STATE_PATH } from "./global-setup";
 
 export const baseApiURL = "https://api.discogs.com";
+
+export const STORAGE_STATE_PATH = "./storageState.json";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -64,6 +65,14 @@ export default defineConfig({
     {
       name: "guest-ui",
       testDir: "./tests/ui/guest/",
+      use: {
+        ...devices["Desktop Chrome"],
+      },
+    },
+
+    {
+      name: "fixture-logout-ui",
+      testDir: "./tests/ui/logout/",
       use: {
         ...devices["Desktop Chrome"],
       },
