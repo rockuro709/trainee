@@ -1,17 +1,19 @@
 // src/fixtures/fixtures.ts
-import { test as baseTest, APIRequestContext } from "@playwright/test";
+import { test as baseTest } from "@playwright/test";
 import { Web } from "../utils/Web";
 import { LoginCredentials } from "../types/LoginCredentials";
 import { baseApiURL } from "../../playwright.config";
 import { ClientManager } from "../clients/ClientManager";
+import { PublicClientManager } from "../clients/PublicClientManager";
 
 type MyFixtures = {
   testUser: LoginCredentials;
   web: Web;
   webAuth: Web;
   webLoggedIn: Web;
-  authorizedContext: APIRequestContext;
   api: ClientManager;
+  publicApi: PublicClientManager;
+  randomReleaseId: number;
 };
 
 export const test = baseTest.extend<MyFixtures>({
@@ -31,8 +33,10 @@ export const test = baseTest.extend<MyFixtures>({
     await use(web);
   },
 
-  webAuth: async ({ web }, use) => {
+  webAuth: async ({ page }, use) => {
+    const web = new Web(page);
     await web.basePage.navigate("/my");
+    await web.cookieBanner.acceptCookies();
     await web.header.loggedInAsAriaLabel.waitFor({
       state: "visible",
       timeout: 15000,
@@ -45,9 +49,8 @@ export const test = baseTest.extend<MyFixtures>({
     await use(web);
   },
 
-  authorizedContext: async ({ playwright }, use) => {
+  api: async ({ playwright, testUser }, use) => {
     const apiToken = process.env.DISCOGS_API_TOKEN!;
-
     const context = await playwright.request.newContext({
       baseURL: baseApiURL,
       extraHTTPHeaders: {
@@ -55,15 +58,48 @@ export const test = baseTest.extend<MyFixtures>({
         Authorization: `Discogs token=${apiToken}`,
       },
     });
-    await use(context);
+
+    const clientManager = new ClientManager(context, testUser.username);
+    await use(clientManager);
+
     await context.dispose();
   },
 
-  api: async ({ authorizedContext, testUser }, use) => {
-    const clientManager = new ClientManager(
-      authorizedContext,
-      testUser.username,
+  publicApi: async ({ playwright }, use) => {
+    const context = await playwright.request.newContext({
+      baseURL: baseApiURL,
+      extraHTTPHeaders: {
+        "User-Agent": "MyTraineeTestFramework/1.0",
+      },
+    });
+
+    const publicClientManager = new PublicClientManager(context);
+    await use(publicClientManager);
+
+    await context.dispose();
+  },
+
+  randomReleaseId: async ({ publicApi }, use) => {
+    const LABEL_ID = 2294;
+
+    const initialResponse = await publicApi.labelClient.getReleasesByLabelId(
+      LABEL_ID,
+      { per_page: 1 },
     );
-    await use(clientManager);
+    const totalPages = Math.ceil(initialResponse.pagination.items / 50);
+
+    const randomPageNumber = Math.floor(Math.random() * totalPages) + 1;
+    const pageResponse = await publicApi.labelClient.getReleasesByLabelId(
+      LABEL_ID,
+      {
+        page: randomPageNumber,
+      },
+    );
+    const randomRelease =
+      pageResponse.releases[
+        Math.floor(Math.random() * pageResponse.releases.length)
+      ];
+
+    await use(randomRelease.id);
   },
 });

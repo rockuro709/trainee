@@ -46,5 +46,8 @@
       "prettier --write",
       "eslint --fix"
     ]
+  },
+  "dependencies": {
+    "zod": "^3.25.67"
   }
 }

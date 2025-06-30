@@ -44,7 +44,7 @@ export interface WantlistItemDto {
 
 //для ответа от GET /wants (получение всего списка)
 export interface GetWantlistResponseDto {
-  pagination: object; //пагинация??
+  pagination: object;
   wants: WantlistItemDto[];
 }
 

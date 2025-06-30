@@ -7,7 +7,7 @@ There are four projects in playwright.config:
 
 "auth-ui"
 testDir: "./tests/ui/authenticated/"
-uses fixture "web" and "globalSetup" for acceptance cookies and authorized tests.
+uses fixture "webAuth" for acceptance cookies and accurate working in headless-mode for authorized tests (anti-bot system) and "globalSetup" for authorized tests.
 
 "guest-ui"
 testDir: "./tests/ui/guest/"
@@ -21,4 +21,4 @@ name: "api"
 testDir: "./tests/api/"
 uses fixture "api" for authorized API-tests.
 
-так, я назвал webGuest просто web, чтобы не плодить сущности. я использую просто web для теста на логин, использую api для тестов на чистое апи, использую webLoggedIn для логаута, использую webAuth для тестов, требующих авторизованной страницы.
+я использую просто web для теста на логин, использую api для тестов на чистое апи, использую webLoggedIn для логаута, использую webAuth для тестов, требующих авторизованной страницы.

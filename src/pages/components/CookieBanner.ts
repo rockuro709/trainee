@@ -7,7 +7,12 @@ export class CookieBanner extends BasePage {
   );
 
   async acceptCookies() {
-    await this.cookiesAcceptButton.click();
-    await this.cookiesAcceptButton.waitFor({ state: "hidden" });
+    if (await this.cookiesAcceptButton.isVisible({ timeout: 3000 })) {
+      console.log("Cookie banner is found. Accepting...");
+      await this.cookiesAcceptButton.click();
+      await this.cookiesAcceptButton.waitFor({ state: "hidden" });
+    } else {
+      console.log("Cookie banner is not found or was accepted, skipping.");
+    }
   }
 }

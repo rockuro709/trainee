@@ -3,7 +3,8 @@ import { APIRequestContext, APIResponse } from "@playwright/test";
 
 type RequestOptions = {
   data?: unknown; //это боди
-  params?: { [key: string]: string | number | boolean }; //для запроса с ?параметрами
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  params?: Record<string, any>; //для запроса с ?параметрами
   headers?: { [key: string]: string };
 };
 

@@ -1,4 +1,4 @@
-// src/pages/components/HomePage.ts
+// src/pages/components/Header.ts
 import { BasePage } from "../BasePage";
 
 export class Header extends BasePage {
