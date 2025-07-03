@@ -1,5 +1,6 @@
 // src/pages/WantlistPage.ts
 import { BasePage } from "./BasePage";
+import { Locator } from "@playwright/test";
 
 export class WantlistPage extends BasePage {
   readonly buttons = {
@@ -9,4 +10,10 @@ export class WantlistPage extends BasePage {
       .first(),
     dialogOkayButton: this.page.locator(".dialog-button-okay"),
   };
+  public getReleaseRowLocatorById(releaseId: number): Locator {
+    const allItemsInWantlist = this.page.locator('[class*="wantlist_"]');
+    return allItemsInWantlist.filter({
+      has: this.page.locator(`[href*="release/${releaseId}"]`),
+    });
+  }
 }

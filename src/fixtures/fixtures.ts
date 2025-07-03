@@ -5,6 +5,9 @@ import { LoginCredentials } from "../types/LoginCredentials";
 import { baseApiURL } from "../../playwright.config";
 import { ClientManager } from "../clients/ClientManager";
 import { PublicClientManager } from "../clients/PublicClientManager";
+import fs from "fs";
+import { Release } from "../types/api/label.schema";
+import { RELEASES_DATA_PATH } from "../../playwright.config";
 
 type MyFixtures = {
   testUser: LoginCredentials;
@@ -13,6 +16,7 @@ type MyFixtures = {
   webLoggedIn: Web;
   api: ClientManager;
   publicApi: PublicClientManager;
+  allLabelReleases: Release[];
   randomReleaseId: number;
 };
 
@@ -79,27 +83,15 @@ export const test = baseTest.extend<MyFixtures>({
     await context.dispose();
   },
 
-  randomReleaseId: async ({ publicApi }, use) => {
-    const LABEL_ID = 2294;
+  allLabelReleases: async ({}, use) => {
+    const data = fs.readFileSync(RELEASES_DATA_PATH, "utf-8");
+    const releases: Release[] = JSON.parse(data);
+    await use(releases);
+  },
 
-    const initialResponse = await publicApi.labelClient.getReleasesByLabelId(
-      LABEL_ID,
-      { per_page: 1 },
-    );
-    const totalPages = Math.ceil(initialResponse.pagination.items / 50);
-
-    const randomPageNumber = Math.floor(Math.random() * totalPages) + 1;
-    const pageResponse = await publicApi.labelClient.getReleasesByLabelId(
-      LABEL_ID,
-      {
-        page: randomPageNumber,
-      },
-    );
+  randomReleaseId: async ({ allLabelReleases }, use) => {
     const randomRelease =
-      pageResponse.releases[
-        Math.floor(Math.random() * pageResponse.releases.length)
-      ];
-
+      allLabelReleases[Math.floor(Math.random() * allLabelReleases.length)];
     await use(randomRelease.id);
   },
 });

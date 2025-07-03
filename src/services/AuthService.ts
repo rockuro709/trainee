@@ -1,14 +1,11 @@
 // src/services/AuthService.ts
-import { Page } from "@playwright/test";
 import { LoginCredentials } from "../types/LoginCredentials";
 import { Web } from "../utils/Web";
 
 export class AuthService {
-  private readonly page: Page;
   private readonly web: Web;
 
-  constructor(page: Page, web: Web) {
-    this.page = page;
+  constructor(web: Web) {
     this.web = web;
   }
 

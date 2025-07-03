@@ -1,6 +1,11 @@
 // global-setup.ts
-import { chromium, FullConfig } from "@playwright/test";
-import { STORAGE_STATE_PATH } from "./playwright.config";
+import { chromium, FullConfig, request } from "@playwright/test";
+import {
+  STORAGE_STATE_PATH,
+  RELEASES_DATA_PATH,
+  baseApiURL,
+} from "./playwright.config";
+import { LabelClient } from "./src/clients/LabelClient";
 import fs from "fs";
 
 async function globalSetup(config: FullConfig) {
@@ -41,6 +46,30 @@ async function globalSetup(config: FullConfig) {
   } finally {
     await browser.close();
     console.log("Browser with globalSetup is closed.");
+  }
+
+  console.log("Preparing test data: receiving random releases...");
+  const requestContext = await request.newContext({ baseURL: baseApiURL });
+  try {
+    const labelClient = new LabelClient(requestContext);
+    const LABEL_ID = 2294;
+
+    const initialResponse = await labelClient.getReleasesByLabelId(LABEL_ID, {
+      per_page: 1,
+    });
+    const totalPages = Math.ceil(initialResponse.pagination.items / 50);
+    const randomPageNumber = Math.floor(Math.random() * totalPages) + 1;
+    const pageResponse = await labelClient.getReleasesByLabelId(LABEL_ID, {
+      page: randomPageNumber,
+    });
+
+    fs.writeFileSync(
+      RELEASES_DATA_PATH,
+      JSON.stringify(pageResponse.releases, null, 2),
+    );
+    console.log(`Releases data is saved to ${RELEASES_DATA_PATH}`);
+  } finally {
+    await requestContext.dispose();
   }
 }
 

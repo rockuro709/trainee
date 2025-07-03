@@ -8,6 +8,7 @@ import { Header } from "../pages/components/Header";
 import { ReleasePage } from "../pages/ReleasePage";
 import { WantlistService } from "../services/WantlistService";
 import { WantlistPage } from "../pages/WantlistPage";
+import { ReleaseService } from "../services/ReleaseService";
 
 /**
  * @description Единый менеджер для всех Page Objects и Services.
@@ -22,15 +23,17 @@ export class Web {
   public readonly releasePage: ReleasePage;
   public readonly wantlistService: WantlistService;
   public readonly wantlistPage: WantlistPage;
+  public readonly releaseService: ReleaseService;
 
   constructor(page: Page) {
     this.basePage = new BasePage(page);
     this.loginPage = new LoginPage(page);
     this.cookieBanner = new CookieBanner(page);
-    this.authService = new AuthService(page, this);
+    this.authService = new AuthService(this);
     this.header = new Header(page);
     this.releasePage = new ReleasePage(page);
-    this.wantlistService = new WantlistService(page, this);
+    this.wantlistService = new WantlistService(this);
     this.wantlistPage = new WantlistPage(page);
+    this.releaseService = new ReleaseService(this);
   }
 }

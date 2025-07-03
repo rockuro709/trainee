@@ -19,14 +19,14 @@ export class WantlistClient extends BaseApiClient {
     return this.sendApiRequest<GetWantlistResponseDto>("get", path);
   }
 
-  public addReleaseToWantlist(
+  public putReleaseToWantlist(
     releaseId: number,
   ): Promise<AddItemToWantlistResponseDto> {
     const path = `/users/${this.username}/wants/${releaseId}`;
     return this.sendApiRequest<AddItemToWantlistResponseDto>("put", path);
   }
 
-  public removeReleaseFromWantlist(releaseId: number): Promise<void> {
+  public deleteReleaseFromWantlist(releaseId: number): Promise<void> {
     const path = `/users/${this.username}/wants/${releaseId}`;
     return this.sendApiRequest<void>("delete", path);
   }

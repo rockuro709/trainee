@@ -5,7 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 export const baseApiURL = "https://api.discogs.com";
-
+export const RELEASES_DATA_PATH = "./releases.data.json";
 export const STORAGE_STATE_PATH = "./storageState.json";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -31,6 +31,7 @@ for (const varName of requiredEnvVars) {
 export default defineConfig({
   //testDir: "./tests",
   globalSetup: "./global-setup.ts",
+  globalTeardown: "./global-teardown.ts",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

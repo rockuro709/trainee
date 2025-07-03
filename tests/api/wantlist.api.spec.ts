@@ -9,7 +9,7 @@ test.describe("Wantlist API client", async () => {
   }) => {
     //add
     const addRelease =
-      await api.wantlistClient.addReleaseToWantlist(randomReleaseId);
+      await api.wantlistClient.putReleaseToWantlist(randomReleaseId);
     expect(addRelease.id).toBe(randomReleaseId);
     //check
     const wantlist = await api.wantlistClient.getWantlist();
@@ -18,7 +18,7 @@ test.describe("Wantlist API client", async () => {
     );
     expect(foundRelease).toBeDefined();
     //remove
-    await api.wantlistClient.removeReleaseFromWantlist(randomReleaseId);
+    await api.wantlistClient.deleteReleaseFromWantlist(randomReleaseId);
     //check
     const wantlistAfterDelete = await api.wantlistClient.getWantlist();
     const notFoundRelease = wantlistAfterDelete.wants.find(
