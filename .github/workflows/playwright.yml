@@ -22,31 +22,23 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Format code
-        run: npm run format:check
-
-      - name: Lint code
-        run: npm run lint
-
-      - name: Install Playwright Chromium
-        run: npx playwright install chromium --with-deps
-
-      - name: Run Playwright tests
-        #следующие шаги выполняются, даже если тесты упадут
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build -t discogs-tests .
+      - name: Run Playwright tests in Docker
+        # if:always() гарантирует, что отчеты будут созданы, даже если тесты упадут
         if: always()
-        env:
-          DISCOGS_USERNAME: ${{ secrets.DISCOGS_USERNAME }}
-          DISCOGS_PASSWORD: ${{ secrets.DISCOGS_PASSWORD }}
-          DISCOGS_EMAIL: ${{ secrets.DISCOGS_EMAIL }}
-          DISCOGS_API_TOKEN: ${{ secrets.DISCOGS_API_TOKEN }}
-        run: npx playwright test
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}/playwright-report:/app/playwright-report \
+            -v ${{ github.workspace }}/test-results:/app/test-results \
+            --env DISCOGS_USERNAME=${{ secrets.DISCOGS_USERNAME }} \
+            --env DISCOGS_PASSWORD=${{ secrets.DISCOGS_PASSWORD }} \
+            --env DISCOGS_EMAIL=${{ secrets.DISCOGS_EMAIL }} \
+            --env DISCOGS_API_TOKEN=${{ secrets.DISCOGS_API_TOKEN }} \
+            --env CI=true \
+            discogs-tests
 
       # специальный экшн упаковывает отчет в формат, понятный для публикации
       - name: Upload artifact for GitHub Pages

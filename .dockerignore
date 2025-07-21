@@ -1,0 +1,10 @@
+#.dockerignore
+.git
+.github
+.husky
+node_modules
+playwright-report
+test-results
+storageState.json
+releases.data.json
+.env
