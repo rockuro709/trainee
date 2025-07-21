@@ -35,7 +35,11 @@ async function globalSetup(config: FullConfig) {
     await page.locator("#password").fill(process.env.DISCOGS_PASSWORD!);
     await page.locator("button[name=action]").click();
 
-    await page.waitForURL("**/my", { timeout: 15000 });
+    // await page.waitForURL("**/my", { timeout: 15000 });
+    const loggedInIndicator = page.getByRole("button", {
+      name: /Logged in as/i,
+    });
+    await loggedInIndicator.waitFor({ state: "visible", timeout: 15000 });
     console.log("Login is succeed, save the state...");
 
     await context.storageState({ path: STORAGE_STATE_PATH });
