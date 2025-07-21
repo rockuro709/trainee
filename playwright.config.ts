@@ -70,7 +70,7 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
       },
     },
-
+    //в тесте можно не использовать storageState
     {
       name: "fixture-logout-ui",
       testDir: "./tests/ui/logout/",

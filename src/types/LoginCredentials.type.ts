@@ -1,4 +1,4 @@
-// src/types/LoginCredentials.ts
+// src/types/LoginCredentials.type.ts
 export type LoginCredentials = {
   username: string;
   email: string;

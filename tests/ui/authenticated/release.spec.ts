@@ -38,7 +38,7 @@ test.describe("Release scenarios", async () => {
         randomReleaseId,
       }) => {
         await webAuth.releaseService.removeReleaseFromWantlist(randomReleaseId);
-        await expect
+        await expect //утилс для экспектов
           .poll(
             async () => {
               const wantlist = await api.wantlistClient.getWantlist();

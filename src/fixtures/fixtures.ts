@@ -1,7 +1,7 @@
 // src/fixtures/fixtures.ts
 import { test as baseTest } from "@playwright/test";
 import { Web } from "../utils/Web";
-import { LoginCredentials } from "../types/LoginCredentials";
+import { LoginCredentials } from "../types/LoginCredentials.type";
 import { baseApiURL } from "../../playwright.config";
 import { ClientManager } from "../clients/ClientManager";
 import { PublicClientManager } from "../clients/PublicClientManager";

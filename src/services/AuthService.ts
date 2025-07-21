@@ -1,5 +1,5 @@
 // src/services/AuthService.ts
-import { LoginCredentials } from "../types/LoginCredentials";
+import { LoginCredentials } from "../types/LoginCredentials.type";
 import { Web } from "../utils/Web";
 
 export class AuthService {

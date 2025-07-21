@@ -52,4 +52,4 @@ export class BaseApiClient {
     }
     return (await response.json()) as T;
   }
-}
+} //возвращать статус
