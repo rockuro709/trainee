@@ -1,7 +1,7 @@
 {
-  "name": "trainee",
+  "name": "pet-project",
   "version": "1.0.0",
-  "description": "Anton Tratseuski's trainee project",
+  "description": "Anton Tratseuski's pet project",
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
@@ -17,15 +17,15 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rockuro709/trainee.git"
+    "url": "git+https://github.com/rockuro709/pet-project.git"
   },
   "keywords": [],
   "author": "Anton Tratseuski",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/rockuro709/trainee/issues"
+    "url": "https://github.com/rockuro709/pet-project/issues"
   },
-  "homepage": "https://github.com/rockuro709/trainee#readme",
+  "homepage": "https://github.com/rockuro709/pet-project#readme",
   "devDependencies": {
     "@faker-js/faker": "^9.9.0",
     "@playwright/test": "^1.53.0",

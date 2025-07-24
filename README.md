@@ -1,5 +1,5 @@
 #README.md
-It's Anton Tratseuski's trainee project.
+It's Anton Tratseuski's pet project.
 App: https://www.discogs.com/
 Tech stack: TypeScript, Playwright, ESLint, Prettier
 

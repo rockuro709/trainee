@@ -58,7 +58,7 @@ export const test = baseTest.extend<MyFixtures>({
     const context = await playwright.request.newContext({
       baseURL: baseApiURL,
       extraHTTPHeaders: {
-        "User-Agent": "MyTraineeTestFramework/1.0",
+        "User-Agent": "MyPetProjectTestFramework/1.0",
         Authorization: `Discogs token=${apiToken}`,
       },
     });
@@ -73,7 +73,7 @@ export const test = baseTest.extend<MyFixtures>({
     const context = await playwright.request.newContext({
       baseURL: baseApiURL,
       extraHTTPHeaders: {
-        "User-Agent": "MyTraineeTestFramework/1.0",
+        "User-Agent": "MyPetProjectTestFramework/1.0",
       },
     });
 

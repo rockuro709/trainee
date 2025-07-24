@@ -1,5 +1,5 @@
 #.github/workflows/playwright.yml
-name: Trainee's project
+name: Pet project
 on:
   push:
     branches: main
